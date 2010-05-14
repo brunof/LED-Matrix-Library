@@ -1,0 +1,51 @@
+
+ROM used: 516 (2%)
+          516 (2%) including unused fragments
+
+          1 Average locations per line
+          9 Average locations per statement
+
+RAM used: 110 (5%) at main() level
+          113 (6%) worst case
+
+Stack used: 3 worst case (out of 31 total available)
+
+Lines Stmts  %   Files
+----- ----- ---  -----
+   57    27  49  main.c
+   39     0   0  main.h
+  457     0   0  C:\Program Files\PICC\devices\18F4550.h
+   69    28  51  publik.h
+   55     0   0  config.h
+----- -----
+  677    55 Total
+
+Page ROM  %  RAM   Vol Diff  Functions:
+---- --- --- ---   --- ----  ----------
+0     10   1   0    38  1.4  Publik_Inicializar
+0    126  12   3   802  8.7  Publik_Refrescar
+0     10   1   0    29  2.0  Publik_Ejecutar
+0     14   1   0   100  2.5  TIMER0_isr
+0    186  18   3   718  5.3  main
+
+Program metrics:
+    Functions               5
+    Statements              55
+    Comments                125
+    Volume (V)              2180
+    Difficilty (D)          21.0
+    Effort to implement (E) 45842
+    Time to implement (T)   42 minutes
+    Est Delivered Bugs (B)  0
+    Cyclomatic Complexity   7
+    Maintainability (MI)    150
+
+ Segment     Used  Free
+-----------  ----  ----
+00000-00002     4  0  
+00004-00006     0  4  
+00008-000AC   166  0  
+000AE-07FFE   346  32248  
+
+
+

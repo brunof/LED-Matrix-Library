@@ -1,0 +1,462 @@
+CCS PCH C Compiler, Version 4.107, 18963               14-may-10 12:45
+
+               Filename: D:\Bruno\Personal\IP\Tuto Matriz de LEDs\Pic Soft\main.lst
+
+               ROM used: 516 bytes (2%)
+                         Largest free fragment is 32248
+               RAM used: 110 (5%) at main() level
+                         113 (6%) worst case
+               Stack:    3 worst case (1 in main + 2 for interrupts)
+
+*
+0000:  GOTO   014E
+*
+0008:  MOVWF  04
+000A:  MOVFF  FD8,05
+000E:  MOVFF  FE0,06
+0012:  MOVLB  0
+0014:  MOVFF  FE9,0C
+0018:  MOVFF  FEA,07
+001C:  MOVFF  FE1,08
+0020:  MOVFF  FE2,09
+0024:  MOVFF  FD9,0A
+0028:  MOVFF  FDA,0B
+002C:  MOVFF  FF3,12
+0030:  MOVFF  FF4,13
+0034:  MOVFF  FFA,14
+0038:  MOVFF  FF5,15
+003C:  MOVFF  FF6,16
+0040:  MOVFF  FF7,17
+0044:  MOVFF  00,0E
+0048:  MOVFF  01,0F
+004C:  MOVFF  02,10
+0050:  MOVFF  03,11
+0054:  BTFSS  FF2.5
+0056:  GOTO   0060
+005A:  BTFSC  FF2.2
+005C:  GOTO   012C
+0060:  MOVFF  0E,00
+0064:  MOVFF  0F,01
+0068:  MOVFF  10,02
+006C:  MOVFF  11,03
+0070:  MOVFF  0C,FE9
+0074:  MOVFF  07,FEA
+0078:  BSF    07.7
+007A:  MOVFF  08,FE1
+007E:  MOVFF  09,FE2
+0082:  MOVFF  0A,FD9
+0086:  MOVFF  0B,FDA
+008A:  MOVFF  12,FF3
+008E:  MOVFF  13,FF4
+0092:  MOVFF  14,FFA
+0096:  MOVFF  15,FF5
+009A:  MOVFF  16,FF6
+009E:  MOVFF  17,FF7
+00A2:  MOVF   04,W
+00A4:  MOVFF  06,FE0
+00A8:  MOVFF  05,FD8
+00AC:  RETFIE 0
+.................... #case                      //sensible a mayúsculas 
+.................... #zero_ram                  //inicializar toda la RAM a 0x00 
+....................  
+.................... #include "main.h"          //incluir configuración de FOSC,FUSES y módulos especiales 
+.................... #include <18F4550.h> 
+.................... //////// Standard Header file for the PIC18F4550 device //////////////// 
+.................... #device PIC18F4550 
+.................... #list 
+....................  
+.................... #device adc=8 
+....................  
+.................... #FUSES NOWDT                    //No Watch Dog Timer 
+.................... #FUSES WDT128                   //Watch Dog Timer uses 1:128 Postscale 
+.................... #FUSES HSPLL                    //High Speed Crystal/Resonator with PLL enabled 
+.................... #FUSES NOPROTECT                //Code not protected from reading 
+.................... #FUSES NOBROWNOUT               //No brownout reset 
+.................... #FUSES BORV20                   //Brownout reset at 2.0V 
+.................... #FUSES PUT                      //Power Up Timer 
+.................... #FUSES NOCPD                    //No EE protection 
+.................... #FUSES STVREN                   //Stack full/underflow will cause reset 
+.................... #FUSES NODEBUG                  //No Debug mode for ICD 
+.................... #FUSES NOLVP                    //No low voltage prgming, B3(PIC16) or B5(PIC18) used for I/O 
+.................... #FUSES NOWRT                    //Program memory not write protected 
+.................... #FUSES NOWRTD                   //Data EEPROM not write protected 
+.................... #FUSES IESO                     //Internal External Switch Over mode enabled 
+.................... #FUSES FCMEN                    //Fail-safe clock monitor enabled 
+.................... #FUSES PBADEN                   //PORTB pins are configured as analog input channels on RESET 
+.................... #FUSES NOWRTC                   //configuration not registers write protected 
+.................... #FUSES NOWRTB                   //Boot block not write protected 
+.................... #FUSES NOEBTR                   //Memory not protected from table reads 
+.................... #FUSES NOEBTRB                  //Boot block not protected from table reads 
+.................... #FUSES NOCPB                    //No Boot Block code protection 
+.................... #FUSES MCLR                     //Master Clear pin enabled 
+.................... #FUSES LPT1OSC                  //Timer1 configured for low-power operation 
+.................... #FUSES XINST                    //Extended set extension and Indexed Addressing mode enabled 
+.................... #FUSES PLL5                     //Divide By 5(20MHz oscillator input) 
+.................... #FUSES CPUDIV1                  //No System Clock Postscaler 
+.................... #FUSES USBDIV                   //USB clock source comes from PLL divide by 2 
+.................... #FUSES VREGEN                   //USB voltage regulator enabled 
+.................... #FUSES ICPRT                    //ICPRT enabled 
+....................  
+.................... #define     FOSC     48000000 
+....................  
+.................... #use delay(clock = FOSC) 
+.................... #use rs232(baud = 57600, parity = N, xmit = PIN_C6, rcv = PIN_C7, bits = 8) 
+....................  
+....................  
+.................... #include "publik.h" 
+.................... #ifndef    __publik_h__ 
+.................... #define    __publik_h__ 
+....................  
+.................... #include "config.h"        //contiene la configuración del publik y ciertos cálculos/generacion de variables automáticos en base a ella 
+.................... #ifndef    __config_h__ 
+.................... #define    __config_h__ 
+....................  
+.................... #define     SHIFT_DATA  PIN_A1 
+.................... #define     SHIFT_CLK   PIN_A2 
+.................... #define     SHIFT_STB   PIN_A3 
+....................  
+.................... #define  FILAS       8     //defina la cantidad de filas a usar 
+.................... #define  COLUMNAS    80    //defina la cantidad de columnas a usar 
+....................  
+.................... #define  FILAS_ANODO FALSE        //establece si las FILAS controlaran los anodos en comun de los LEDs 
+.................... #define  COLUMNAS_CATODO FALSE    //establece si las COLUMNAS controlaran los catodos en comun de los LEDs 
+....................  
+.................... #if COLUMNAS > 255 
+....................    #define  mode16Bit 
+.................... #endif 
+....................  
+....................  //declarar el buffer que contendra los valores actuales de los LEDs y la mascara que servira para ir refrescando fila a fila 
+.................... #if FILAS <= 8              
+....................    unsigned int8 buffer[COLUMNAS], mascara;     
+.................... #elif FILAS <= 16 
+....................    unsigned int16 buffer[COLUMNAS], mascara; 
+....................    #define  mode16Bit 
+.................... #else 
+....................    #error "La cantidad de filas excede el alcance de este generador" 
+.................... #endif 
+....................  
+.................... //definir valor maximo de mascara segun cantidad de filas a usar 
+.................... #if   FILAS == 7 
+....................    #define  MAX_VALOR_MASC       0x40 
+.................... #elif FILAS == 8 
+....................    #define  MAX_VALOR_MASC       0x80 
+.................... #elif FILAS == 9 
+....................    #define  MAX_VALOR_MASC       0x100 
+.................... #elif FILAS == 10 
+....................    #define  MAX_VALOR_MASC       0x200 
+.................... #elif FILAS == 11 
+....................    #define  MAX_VALOR_MASC       0x400 
+.................... #elif FILAS == 12 
+....................    #define  MAX_VALOR_MASC       0x800 
+.................... #elif FILAS == 13 
+....................    #define  MAX_VALOR_MASC       0x1000 
+.................... #elif FILAS == 14 
+....................    #define  MAX_VALOR_MASC       0x2000 
+.................... #elif FILAS == 15 
+....................    #define  MAX_VALOR_MASC       0x4000 
+.................... #elif FILAS == 16 
+....................    #define  MAX_VALOR_MASC       0x8000 
+.................... #endif 
+....................  
+.................... #define     HERTZ                60 
+.................... #define     PRECARGA_TMR0        (256 - 1000000 / HERTZ / FILAS / 128 * (FOSC / 4000000)) 
+....................  
+.................... #endif 
+....................  
+....................  
+.................... int1  ejecutando;          //variable global que controla la activacion general del cartel! 
+.................... int1  nuevoFrame;          //variable global que indica si se acaba de completar un frame completo! 
+....................  
+.................... //Inicializa las variables del publik y demás configuración 
+.................... void Publik_Inicializar(void) 
+.................... { 
+....................    mascara = 0x01;         //primer fila 
+*
+013A:  MOVLW  01
+013C:  MOVWF  x69
+....................    nuevoFrame = FALSE; 
+013E:  BCF    x6A.1
+....................    //falta... 
+.................... } 
+0140:  GOTO   01D8 (RETURN)
+....................  
+.................... void Publik_Refrescar(void) 
+.................... { 
+....................    #ifdef mode16Bit 
+....................       unsigned int16 i, aux; 
+....................    #else 
+....................       unsigned int8 i, aux; 
+....................    #endif 
+....................  
+....................    //ENVIO DE COLUMNAS A ENCENDER 
+....................    for(i = COLUMNAS; i > 0; i--)    //enviar información de las columnas una a una 
+*
+00AE:  MOVLW  50
+00B0:  MOVWF  x6E
+00B2:  MOVF   x6E,F
+00B4:  BZ    00E2
+....................    { 
+....................       #if(COLUMNAS_CATODO) 
+....................          if(buffer[i-1] & mascara) output_low(SHIFT_DATA); else output_high(SHIFT_DATA);    //enviar cada columna en alto o bajo segun corresponda. 
+....................       #else 
+....................          if(buffer[i-1] & mascara) output_high(SHIFT_DATA); else output_low(SHIFT_DATA);    //enviar cada columna en alto o bajo segun corresponda con logica invertida       
+00B6:  MOVLW  01
+00B8:  SUBWF  x6E,W
+00BA:  CLRF   03
+00BC:  ADDLW  19
+00BE:  MOVWF  FE9
+00C0:  MOVLW  00
+00C2:  ADDWFC 03,W
+00C4:  MOVWF  FEA
+00C6:  MOVF   FEF,W
+00C8:  ANDWF  x69,W
+00CA:  BZ    00D2
+00CC:  BCF    F92.1
+00CE:  BSF    F89.1
+00D0:  BRA    00D6
+00D2:  BCF    F92.1
+00D4:  BCF    F89.1
+....................       #endif 
+....................       output_high(SHIFT_CLK); 
+00D6:  BCF    F92.2
+00D8:  BSF    F89.2
+....................       output_low(SHIFT_CLK); 
+00DA:  BCF    F92.2
+00DC:  BCF    F89.2
+....................    } 
+....................  
+....................    //ENVIO DE FILA A ENCENDER 
+....................    #if(FILAS_ANODO) 
+00DE:  DECF   x6E,F
+00E0:  BRA    00B2
+....................       aux = mascara; 
+....................    #else 
+....................       aux = ~mascara; 
+00E2:  MOVFF  69,6F
+00E6:  COMF   x6F,F
+....................    #endif 
+....................    for(i = 0; i < FILAS; i++) 
+00E8:  CLRF   x6E
+00EA:  MOVF   x6E,W
+00EC:  SUBLW  07
+00EE:  BNC   010E
+....................    { 
+....................       if(bit_test(aux, FILAS - 1)) output_high(SHIFT_DATA); else output_low(SHIFT_DATA);   
+00F0:  BTFSS  x6F.7
+00F2:  BRA    00FA
+00F4:  BCF    F92.1
+00F6:  BSF    F89.1
+00F8:  BRA    00FE
+00FA:  BCF    F92.1
+00FC:  BCF    F89.1
+....................       output_high(SHIFT_CLK); 
+00FE:  BCF    F92.2
+0100:  BSF    F89.2
+....................       output_low(SHIFT_CLK); 
+0102:  BCF    F92.2
+0104:  BCF    F89.2
+....................       aux*= 2;                                                                            //rotar 1 bit a la izquierda 
+0106:  BCF    FD8.0
+0108:  RLCF   x6F,F
+....................    } 
+010A:  INCF   x6E,F
+010C:  BRA    00EA
+....................  
+....................    output_high(SHIFT_STB);                                                                //efectivizar valores enviados en las salidas de los registros 
+010E:  BCF    F92.3
+0110:  BSF    F89.3
+....................    output_low(SHIFT_STB);             
+0112:  BCF    F92.3
+0114:  BCF    F89.3
+....................  
+....................    if(mascara >= MAX_VALOR_MASC) 
+0116:  MOVF   x69,W
+0118:  SUBLW  7F
+011A:  BC    0124
+....................    { 
+....................       mascara = 0x01; 
+011C:  MOVLW  01
+011E:  MOVWF  x69
+....................       nuevoFrame = TRUE; 
+0120:  BSF    x6A.1
+....................    }else{ 
+0122:  BRA    0128
+....................       mascara*= 2;                                                                        //indicar proxima fila. Volver a la primera si estamos en la ultima 
+0124:  BCF    FD8.0
+0126:  RLCF   x69,F
+....................    } 
+.................... } 
+0128:  GOTO   0134 (RETURN)
+....................  
+.................... void Publik_Ejecutar(void) 
+.................... { 
+....................    if(!nuevoFrame) return; 
+*
+0144:  BTFSC  x6A.1
+0146:  BRA    014A
+0148:  BRA    014A
+.................... } 
+014A:  GOTO   0204 (RETURN)
+....................  
+.................... #endif 
+....................  
+....................  
+.................... #use fast_io(ALL)          //configuracion manual de puertos para maxima velocidad 
+....................  
+.................... #int_TIMER0                //interrupción para refrescar la siguiente fila del publik 
+.................... void  TIMER0_isr(void) 
+.................... { 
+....................  
+....................    set_timer0(PRECARGA_TMR0); 
+*
+012C:  CLRF   FD7
+012E:  MOVLW  40
+0130:  MOVWF  FD6
+....................    Publik_Refrescar(); 
+0132:  BRA    00AE
+.................... } 
+....................  
+....................  
+0134:  BCF    FF2.2
+0136:  GOTO   0060
+.................... void main() 
+.................... { 
+*
+014E:  CLRF   FF8
+0150:  BCF    FD0.7
+0152:  BSF    07.7
+0154:  MOVLW  FE
+0156:  MOVWF  00
+0158:  MOVLW  08
+015A:  MOVWF  01
+015C:  MOVLW  02
+015E:  MOVWF  FE9
+0160:  MOVLW  00
+0162:  MOVWF  FEA
+0164:  CLRF   FEE
+0166:  DECFSZ 00,F
+0168:  BRA    0164
+016A:  DECFSZ 01,F
+016C:  BRA    0164
+016E:  CLRF   FEA
+0170:  CLRF   FE9
+0172:  BCF    FB8.3
+0174:  MOVLW  0C
+0176:  MOVWF  FAF
+0178:  MOVLW  A2
+017A:  MOVWF  FAC
+017C:  MOVLW  90
+017E:  MOVWF  FAB
+0180:  MOVF   FC1,W
+0182:  ANDLW  C0
+0184:  IORLW  0F
+0186:  MOVWF  FC1
+0188:  MOVLW  07
+018A:  MOVWF  FB4
+....................    char i; 
+....................  
+....................    port_b_pullups(TRUE); 
+018C:  BCF    FF1.7
+....................    setup_adc_ports(NO_ANALOGS | VSS_VDD); 
+018E:  MOVF   FC1,W
+0190:  ANDLW  C0
+0192:  IORLW  0F
+0194:  MOVWF  FC1
+....................    setup_adc(ADC_OFF); 
+0196:  BCF    FC2.0
+....................    setup_psp(PSP_DISABLED); 
+0198:  BCF    F96.4
+....................    setup_spi(SPI_SS_DISABLED); 
+019A:  BCF    FC6.5
+019C:  MOVLW  01
+019E:  MOVWF  FC6
+01A0:  MOVLW  00
+01A2:  MOVWF  FC7
+....................    setup_wdt(WDT_OFF); 
+01A4:  BCF    FD1.0
+....................    setup_timer_0(RTCC_INTERNAL | RTCC_DIV_128 | RTCC_8_BIT); 
+01A6:  MOVLW  C6
+01A8:  MOVWF  FD5
+....................    setup_timer_1(T1_DISABLED); 
+01AA:  CLRF   FCD
+....................    setup_timer_2(T2_DISABLED, 0, 1); 
+01AC:  MOVLW  00
+01AE:  MOVWF  FCA
+01B0:  MOVLW  00
+01B2:  MOVWF  FCB
+....................    setup_timer_3(T3_DISABLED | T3_DIV_BY_1); 
+01B4:  CLRF   FB1
+....................    setup_comparator(NC_NC_NC_NC); 
+01B6:  MOVLW  07
+01B8:  MOVWF  FB4
+01BA:  MOVF   F92,W
+01BC:  MOVWF  F92
+01BE:  MOVLW  27
+01C0:  MOVWF  00
+01C2:  DECFSZ 00,F
+01C4:  BRA    01C2
+01C6:  BRA    01C8
+01C8:  MOVF   FB4,W
+01CA:  BCF    FA1.6
+....................    setup_vref(FALSE); 
+01CC:  CLRF   FB5
+....................  
+....................    set_tris_a(0x00); 
+01CE:  MOVLW  00
+01D0:  MOVWF  F92
+....................    set_tris_b(0x00); 
+01D2:  MOVWF  F93
+....................    set_tris_c(0x00); 
+01D4:  MOVWF  F94
+....................  
+....................    Publik_Inicializar(); 
+01D6:  BRA    013A
+....................  
+....................    //inicializar matriz con datos predeterminados(por ahora) 
+....................    for(i=0;i<COLUMNAS;i++) 
+01D8:  CLRF   x6B
+01DA:  MOVF   x6B,W
+01DC:  SUBLW  4F
+01DE:  BNC   01F6
+....................    { 
+....................       buffer[i]=i;  
+01E0:  CLRF   03
+01E2:  MOVF   x6B,W
+01E4:  ADDLW  19
+01E6:  MOVWF  FE9
+01E8:  MOVLW  00
+01EA:  ADDWFC 03,W
+01EC:  MOVWF  FEA
+01EE:  MOVFF  6B,FEF
+....................    } 
+01F2:  INCF   x6B,F
+01F4:  BRA    01DA
+....................  
+....................    enable_interrupts(INT_TIMER0); 
+01F6:  BSF    FF2.5
+....................    enable_interrupts(GLOBAL); 
+01F8:  MOVLW  C0
+01FA:  IORWF  FF2,F
+....................  
+....................    ejecutando = TRUE;                 //comenzar funcionamiento del cartel!!! 
+01FC:  BSF    x6A.0
+....................  
+....................    while(ejecutando) 
+....................    { 
+01FE:  BTFSS  x6A.0
+0200:  BRA    0206
+....................       Publik_Ejecutar(); 
+0202:  BRA    0144
+....................    } 
+0204:  BRA    01FE
+.................... } 
+0206:  SLEEP 
+
+Configuration Fuses:
+   Word  1: CE24   IESO FCMEN HSPLL PLL5 CPUDIV1 USBDIV
+   Word  2: 0E38   NOBROWNOUT WDT128 NOWDT BORV20 PUT VREGEN
+   Word  3: 8700   PBADEN CCP2C1 MCLR LPT1OSC
+   Word  4: 00A1   STVREN NODEBUG NOLVP NOXINST ICPRT
+   Word  5: C00F   NOPROTECT NOCPD NOCPB
+   Word  6: E00F   NOWRT NOWRTD NOWRTC NOWRTB
+   Word  7: 400F   NOEBTR NOEBTRB
