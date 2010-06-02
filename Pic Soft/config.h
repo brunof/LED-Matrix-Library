@@ -1,3 +1,10 @@
+/*
+   Hecho por Bruno Fascendini(BrunoF) para el foro todopic, como parte del tutorial: Librería Matríz de LEDs Universal[compilador CCS]
+   Url: http://www.todopic.com.ar/foros/index.php?topic=30658
+   Comenzado en Mayo de 2010
+   Colaboradores:
+
+*/
 #ifndef    __config_h__
 #define    __config_h__
 
@@ -8,11 +15,14 @@
 #define  FILAS       8     //defina la cantidad de filas a usar
 #define  COLUMNAS    80    //defina la cantidad de columnas a usar
 
-#define  FILAS_ANODO FALSE        //establece si las FILAS controlaran los anodos en comun de los LEDs
-#define  COLUMNAS_CATODO FALSE    //establece si las COLUMNAS controlaran los catodos en comun de los LEDs
+#define  FILAS_ANODO       FALSE    //establece si las FILAS controlaran los anodos en comun de los LEDs
+#define  COLUMNAS_CATODO   FALSE    //establece si las COLUMNAS controlaran los catodos en comun de los LEDs
 
 #if COLUMNAS > 255
-   #define  mode16Bit
+   #define  modo16Bit
+   unsigned int16 BufferInicio;
+#else
+   unsigned int8 BufferInicio;   
 #endif
 
  //declarar el buffer que contendra los valores actuales de los LEDs y la mascara que servira para ir refrescando fila a fila

@@ -1,8 +1,15 @@
+/*
+   Hecho por Bruno Fascendini(BrunoF) para el foro todopic, como parte del tutorial: Librería Matríz de LEDs Universal[compilador CCS]
+   Url: http://www.todopic.com.ar/foros/index.php?topic=30658
+   Comenzado en Mayo de 2010
+   Colaboradores:
+
+*/
 #case                      //sensible a mayúsculas
 #zero_ram                  //inicializar toda la RAM a 0x00
 
 #include "main.h"          //incluir configuración de FOSC,FUSES y módulos especiales
-#include "publik.h"
+#include "publik.c"
 
 #use fast_io(ALL)          //configuracion manual de puertos para maxima velocidad
 
@@ -37,12 +44,6 @@ void main()
    set_tris_c(0x00);
 
    Publik_Inicializar();
-
-   //inicializar matriz con datos predeterminados(por ahora)
-   for(i=0;i<COLUMNAS;i++)
-   {
-      buffer[i]=i; 
-   }
 
    enable_interrupts(INT_TIMER0);
    enable_interrupts(GLOBAL);
