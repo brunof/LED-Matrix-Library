@@ -45,6 +45,8 @@ void main()
 
    Publik_Inicializar();
 
+   cambiar_efecto(ROTA_IZQ);
+   
    enable_interrupts(INT_TIMER0);
    enable_interrupts(GLOBAL);
 

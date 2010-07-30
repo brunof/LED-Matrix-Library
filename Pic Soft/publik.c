@@ -11,15 +11,16 @@
 #include "config.h"        //contiene la configuración del publik y ciertos cálculos/generacion de variables automáticos en base a ella
 #include "typos.c"         //contiene la información de las tipografias a utilizar 
 
-const char demo[] = " HOLA FORO TODOPIC!!!";
+const char demo[] = "HOLA FORO TODOPIC!";
 
 int1  ejecutando;          //variable global que controla la activacion general del cartel!
 int1  nuevoFrame;          //variable global que indica si se acaba de completar un frame completo!
+int1  nuevoEfecto;         //Indica si es la primera vez que se ejecuta el efecto.
 
 unsigned int16 archivoPosicionActual;
 char vidaRestante, velocidad, velocidadTmp, efecto; 
 
-void efecto_rota_izq();
+//extern void efecto_rota_izq();
 
 #include "efectos.c"       //contiene las funciones que definen el comportamiento de los efectos...
 
@@ -54,7 +55,7 @@ void Publik_Refrescar(void)
       output_high(SHIFT_CLK);
       output_low(SHIFT_CLK);
       
-      if(!j--) j = COLUMNAS - 1;
+      if(!j) j = COLUMNAS - 1; else j--;
    }
    
    //ENVIO DE FILA A ENCENDER
@@ -91,7 +92,7 @@ void Publik_Ejecutar(void)
 
    switch(efecto)
    {
-      case 0:
+      case ROTA_IZQ:
          efecto_rota_izq();
       break;
       
